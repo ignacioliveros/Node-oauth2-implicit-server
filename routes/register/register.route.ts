@@ -40,7 +40,7 @@ export class RegisterRoute {
                             user.claims = [{ type: 'email', name: req.body.email }];
                             this.userRepo.createUser(user)
                                 .then((user) => {
-                                    console.log(user);
+                                    req.flash('success_msg', 'You are registered');
                                     res.redirect('/login');
                                 }).catch((err) => {
                                     if (err.code === 11000) {
@@ -53,7 +53,7 @@ export class RegisterRoute {
                                             viewModel: req.body,
                                         });
                                    }
-                                }); // catch
+                                });
                         }
                      });
                 });

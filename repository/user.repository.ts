@@ -44,6 +44,7 @@ export class UserRepository implements IUserRepository {
                     reject(err);
                 }
                 const user: IUser = userModel;
+                console.log('The user ' + user.fullName + ' has been created ');
                 resolve(user);
             });
         });

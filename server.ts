@@ -1,5 +1,5 @@
 import * as bodyParser from 'body-parser';
-var flash = require('connect-flash');
+import flash = require('connect-flash');
 import * as cookieParser from 'cookie-parser';
 import * as express from 'express';
 import * as handlebars from 'express-handlebars';
@@ -39,7 +39,7 @@ export class Server {
     private dbConnection() {
         const database = new MongoConnection();
 
-        database.open((err, isConnected) => {
+        database.connecting((err, isConnected) => {
             if (err) {
                 console.log(err);
             }

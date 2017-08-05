@@ -5,7 +5,7 @@ export class MongoConnection {
     private connectionString = 'mongodb://localhost/LoginApp';
     private connection: mongoose.Connection;
 
-    public open(callback: (err: any , isConnected: boolean) => void) {
+    public connecting(callback: (err: any , isConnected: boolean) => void) {
         const options = {};
         mongoose.connect(this.connectionString, options, (err) => {
             if (err) {
