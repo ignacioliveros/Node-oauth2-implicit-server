@@ -1,0 +1,33 @@
+<h2 class="page-header">Register</h2>
+{{#if errors}} 
+    {{#each errors}}
+    <div class="alert alert-danger">
+        {{msg.msg}}
+    </div>
+    {{/each}} 
+{{/if}}
+<form method="post" action="/register">
+    <div class="form-group">
+        <label for="">Full Name</label>
+        <input class="form-control" type="text" name="fullname" placeholder="Full Name" value="{{viewModel.fullname}}">
+    </div>
+    <div class="form-group">
+        <label for="">Username</label>
+        <input class="form-control" type="text" name="username" placeholder="Username" value="{{viewModel.username}}">
+    </div>
+    <div class="form-group">
+        <label for="">Email</label>
+        <input class="form-control" type="text" name="email" placeholder="Email" value="{{viewModel.email}}">
+    </div>
+    <div class="form-group">
+        <label for="">Password</label>
+        <input class="form-control" type="password" name="password" placeholder="Password" value="">
+    </div>
+    <div class="form-group">
+        <label for="">Confirm Password</label>
+        <input class="form-control" type="password" name="confirmPassword" placeholder="Password" value="">
+    </div>
+    <div class="form-group">
+        <button class="btn btn-default" type="submit">Submit</button>
+    </div>
+</form>
