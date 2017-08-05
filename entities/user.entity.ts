@@ -3,6 +3,7 @@ export interface IUser {
     fullName: string;
     username: string;
     password: string;
+    subjectId?: string;
     claims: Iclaim[];
 }
 

@@ -33,7 +33,7 @@ export class RegisterRoute {
                                 viewModel: req.body,
                             });
                         } else {
-                            const user: IUser = {id: '', username: '', fullName: '', password: '', claims: [] };
+                            const user: IUser = {_id: null, username: '', fullName: '', password: '' , claims: [] };
                             user.fullName = req.body.fullname;
                             user.username = req.body.username;
                             user.password = req.body.password;
@@ -43,8 +43,17 @@ export class RegisterRoute {
                                     console.log(user);
                                     res.redirect('/login');
                                 }).catch((err) => {
-                                    console.log(err);
-                                });
+                                    if (err.code === 11000) {
+                                        console.log(err.toJSON());
+                                        res.render('register', {
+                                            errors: [{
+                                                msg:
+                                                { msg: 'Username already exist' },
+                                            }],
+                                            viewModel: req.body,
+                                        });
+                                   }
+                                }); // catch
                         }
                      });
                 });

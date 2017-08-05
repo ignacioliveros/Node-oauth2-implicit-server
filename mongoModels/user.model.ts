@@ -12,8 +12,9 @@ const ClaimSchema = new Schema({
 });
 
 const UserSchema = new Schema({
+    subjectId: { type: String, unique: true, default: () => new Types.ObjectId() },
     fullName: { type: String, required: true },
-    username: { type: String, required: true },
+    username: { type: String, unique: true , required: true, lowercase: true},
     password: { type: String, required: true },
     claims: [ClaimSchema],
 });

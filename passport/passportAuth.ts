@@ -13,13 +13,12 @@ export class PassportAuth {
         this.app.use(passport.session());
 
         passport.use(new Strategy((username, password, done) => {
-            this.userRepo.getUserByUsername(username)
+            this.userRepo.getUserByUsername(username.toLowerCase())
                 .then((user) => {
                     if (!user) {
                         return done(null, false, { message: 'Incorrect username.' });
                     }
                     const isMatch = PasswordHash.comparePassword(password, user.password);
-                    console.log(isMatch);
                     if (isMatch) {
                         return done(null, user);
                     } else {

@@ -37,10 +37,9 @@ export class UserRepository implements IUserRepository {
     }
 
    public createUser(user: IUser): Promise<IUser> {
-       const newUser: IUser = user;
-       newUser.password = PasswordHash.hashing(user.password);
+       user.password = PasswordHash.hashing(user.password);
        return new Promise((resolve, reject) => {
-            User.create(newUser, (err, userModel) => {
+            User.create(user, (err, userModel) => {
                 if (err) {
                     reject(err);
                 }
