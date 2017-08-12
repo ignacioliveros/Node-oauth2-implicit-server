@@ -3,7 +3,7 @@ import * as mongoose from 'mongoose';
 export class MongoConnection {
 
     private connectionString = 'mongodb://localhost/LoginApp';
-    private connection: mongoose.Connection;
+    public connection: mongoose.Connection;
 
     public connecting(callback: (err: any , isConnected: boolean) => void) {
         const options = {};

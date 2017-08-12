@@ -6,6 +6,7 @@ export interface IUserRepository {
     getUserById(userId): Promise<IUser>;
     createUser(user: IUser): Promise<IUser>;
     getUserByUsername(username: string): Promise<IUser>;
+    getUserBySubjectId(subjectId: string): Promise<IUser>;
 
 }
 
@@ -35,6 +36,19 @@ export class UserRepository implements IUserRepository {
             }));
         });
     }
+
+   public getUserBySubjectId(subjectId: string): Promise<IUser> {
+       return new Promise((resolve, reject) => {
+           const query = { subjectId: subjectId };
+           User.findOne(query, ((err, userModel) => {
+               if (err) {
+                   reject(err);
+               }
+               const user: IUser = userModel;
+               resolve(user);
+           }));
+       });
+   }
 
    public createUser(user: IUser): Promise<IUser> {
        user.password = PasswordHash.hashing(user.password);

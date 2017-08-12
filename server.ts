@@ -1,6 +1,7 @@
 import * as bodyParser from 'body-parser';
 import flash = require('connect-flash');
 import * as cookieParser from 'cookie-parser';
+import * as cors from 'cors';
 import * as express from 'express';
 import * as handlebars from 'express-handlebars';
 import * as session from 'express-session';
@@ -8,8 +9,9 @@ import * as  expressValidator from 'express-validator';
 import * as http from 'http';
 import * as path from 'path';
 
+import { PassportAuth} from './authentication/passport/passportAuth';
 import { MongoConnection} from './dbConnection/mongoConnection';
-import { PassportAuth} from './passport/passportAuth';
+import {DbSeeder } from './mongoModels/client.model'; // creates a client just for test
 import { Routes } from './router/router';
 
 export class Server {
@@ -42,12 +44,14 @@ export class Server {
         database.connecting((err, isConnected) => {
             if (err) {
                 console.log(err);
+            } else if (isConnected) {
+                const clientSeeder = new DbSeeder();
             }
         });
-
     }
 
     public initExpressMiddleWare() {
+        this.app.use(cors());
         this.app.set('views', path.join(__dirname, 'views'));
         this.app.engine('.hbs', handlebars({ defaultLayout: 'layout', extname: '.hbs' }));
         this.app.set('view engine', '.hbs');
@@ -93,6 +97,10 @@ export class Server {
     private router(): void {
         const router = new Routes();
         router.load(this.app, './routes');
+        // catch all 404
+        this.app.use((req, res) => {
+            res.render('404.hbs');
+        });
     }
 }
 const server = new Server();

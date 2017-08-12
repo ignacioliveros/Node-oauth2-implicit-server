@@ -1,0 +1,12 @@
+<div >
+    <div class="container">
+         {{#if success_msg}}
+        <h3 class="alert alert-success">{{ success_msg}}</h3>
+        <a class="btn btn-success" href="{{redirectUri}}">Back to web...</a>
+        {{/if}}
+         {{#if error_msg}}
+        <h3 class="alert alert-danger">{{error_msg}}</h3>
+         {{/if}}
+       
+    </div>
+</div>

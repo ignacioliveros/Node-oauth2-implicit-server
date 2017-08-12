@@ -1,9 +1,9 @@
 import { Application} from 'express';
 import * as passport from 'passport';
 import {Strategy} from 'passport-local';
-import { IUser } from '../entities/user.entity';
-import { IUserRepository, UserRepository } from '../repository/user.repository';
-import { PasswordHash} from '../share/password-hash/password.hash';
+import { IUser } from '../../entities/user.entity';
+import { IUserRepository, UserRepository } from '../../repository/user.repository';
+import { PasswordHash} from '../../share/password-hash/password.hash';
 
 export class PassportAuth {
 
