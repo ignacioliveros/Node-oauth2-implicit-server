@@ -25,8 +25,11 @@ export class AuthReqProcessor {
 
     private clientChecking(authReq: IAuthReq): Promise<IClient> {
         return new Promise((resolve, reject) => {
+            if (!this.checkResponseType(authReq)) {
+                reject({ error: 'unsupported_response_type' });
+            }
             if (authReq.scope.indexOf('openid') === -1) {
-                 reject({ error: 'openid is required' });
+                reject({ error: 'bad request' });
             }
             this.clientRepository.getClientByClienId(authReq.client_id)
                 .then((client) => {
@@ -45,6 +48,9 @@ export class AuthReqProcessor {
         });
 
     }
+
+    // add  unsupported_response_type
+    //  invalid_scope
 
     public async createResponse(userId: string, authReq: IAuthReq): Promise<string> {
         const client = await this.clientChecking(authReq);
@@ -65,7 +71,7 @@ export class AuthReqProcessor {
     }
 
     private createToke(user: IUser, client: IClient, authReq: IAuthReq): Promise<{ accessTokenEncode: string, idTokenEncode: string }> {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             const accessToken: IAccessToken = {
                 iss: "http://localhost:4000",
                 aud: "http://localhost:4000",
@@ -74,7 +80,7 @@ export class AuthReqProcessor {
                 exp: Math.floor(Date.now() / 1000) + client.accessTokenLifetime,
                 nbf: Math.floor(Date.now() / 1000),
                 sub: user.subjectId,
-                scope: client.allowedScopes,
+                scope: this.getScope(client, authReq),
             };
             const accessTokenEncode = jwt.sign(accessToken, this.pk, { algorithm: 'RS256' });
 
@@ -90,9 +96,41 @@ export class AuthReqProcessor {
                 sid: authReq.state,
                 sub: user.subjectId,
             };
+            if (!accessToken.scope) {
+                reject('invalid_scope');
+            }
             const idTokenEncode = jwt.sign(idToken, this.pk, { algorithm: 'RS256' });
             resolve({ accessTokenEncode, idTokenEncode });
         });
+    }
+
+    private getScope(client: IClient, authReq: IAuthReq) {
+        const reqScopes = authReq.scope.split(/(?:\s+)/g)
+            .filter((x) => {
+            return x.length !==   0;
+        });
+        const array = [];
+        console.log(reqScopes);
+        for (const item of reqScopes) {
+            const clienScope = client.allowedScopes.find((x) => x === item);
+            console.log(clienScope);
+            if (!clienScope) {
+                console.log(clienScope);
+                return null;
+            }
+            array.push(clienScope);
+        }
+        return array.join(',');
+    }
+
+    public checkResponseType(authReq: IAuthReq): boolean {
+        const resType = 'id_token token'.replace(/\s+/g, '');
+        const reqResType = authReq.response_type.replace(/\s+/g, '');
+        if (resType !== reqResType) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

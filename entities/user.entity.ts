@@ -1,13 +1,13 @@
 export interface IUser {
     _id: any;
-    fullName: string;
-    username: string;
+    name: string;
+    preferred_username: string;
     password: string;
     subjectId?: string;
-    claims: Iclaim[];
+    claims: IClaim[];
 }
 
-export interface Iclaim {
+export interface IClaim {
     type: string;
-    name: string;
+    value: string;
 }

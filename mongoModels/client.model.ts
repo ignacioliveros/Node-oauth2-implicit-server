@@ -9,7 +9,7 @@ const ClientSchema = new Schema({
     clientId: { type: String, unique: true },
     clientName: { type: String, required: true },
     grantType: { type: String, required: true },
-    allowedScopes: { type: String, required: true },
+    allowedScopes: [String],
     identityTokenLifetime: { type: Number, required: true },
     accessTokenLifetime: { type: Number, required: true },
     redirectUris: [String],
@@ -19,7 +19,7 @@ const ClientSchema = new Schema({
 export const Client = model<IClientModel>('Client', ClientSchema);
 
 export class DbSeeder {
-
+   private scope: string[] = ['openid', 'profile', 'email', 'role'];
     constructor() {
          this.init();
     }
@@ -27,7 +27,7 @@ export class DbSeeder {
     private client: IClient = {
         _id: null,
         accessTokenLifetime: 3600,
-        allowedScopes: ['openid', 'email'],
+        allowedScopes: this.scope ,
         clientId: 'pepesApp-implicit',
         clientName: 'pepe',
         grantType: 'implicit',

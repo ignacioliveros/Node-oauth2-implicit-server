@@ -19,6 +19,7 @@ export interface IAccessToken {
     client_id: string;
     sub: string;
     auth_time: number;
-    scope: string[];
+    scope: string;
     iat?: number;
+    [key: string]: any;
 }

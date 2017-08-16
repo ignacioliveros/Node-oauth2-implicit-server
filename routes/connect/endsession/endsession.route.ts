@@ -10,6 +10,7 @@ export class EndSessionRoute {
     private tokenProcessor = new TokenProcesor();
     private userRepository: IUserRepository;
     private clientRepository: IClientRepository;
+    private redirecUri: string;
 
     constructor(private endsessionRouter: Router) {
         this.routesSet();
@@ -22,12 +23,12 @@ export class EndSessionRoute {
                 if (req.isAuthenticated()) {
                     if (req.query.id_token_hint) {
                         const idToken = this.tokenProcessor.idTokenHintDecoder(req.query.id_token_hint);
-                        const redirecUri = req.query.post_logout_redirect_uri;
-                        this.checkBeforeLogout(idToken, redirecUri)
+                        this.redirecUri = req.query.post_logout_redirect_uri;
+                        this.checkBeforeLogout(idToken, this.redirecUri)
                             .then((client) => {
                                 if (client) {
                                     req.logout();
-                                    res.redirect('/logout' + '?' + 'post_logout_redirect_uri=' + redirecUri);
+                                    res.redirect('/logout' + '?' + 'post_logout_redirect_uri=' + this.redirecUri);
                                 } else {
                                     req.logout();
                                     res.redirect('/logout' + '?' + 'wrong= wrong post_logout_redirect_uri');
@@ -36,6 +37,8 @@ export class EndSessionRoute {
                     } else {
                         res.status(400).json({ message: 'no id_token_hint' });
                     }
+                } else if (req.query.id_token_hint) {
+                    res.redirect('/logout' + '?' + 'post_logout_redirect_uri=' + this.redirecUri);
                 } else {
                     res.status(400).json({ message: 'no loged in' });
                 }

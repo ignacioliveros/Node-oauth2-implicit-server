@@ -26,7 +26,7 @@ export class UserRepository implements IUserRepository {
 
    public getUserByUsername(username: string): Promise<IUser> {
         return new Promise((resolve, reject) => {
-            const query = { username: username  };
+            const query = { preferred_username: username  };
             User.findOne(query, ((err, userModel) => {
                 if (err) {
                     reject(err);
@@ -58,7 +58,7 @@ export class UserRepository implements IUserRepository {
                     reject(err);
                 }
                 const user: IUser = userModel;
-                console.log('The user ' + user.fullName + ' has been created ');
+                console.log('The user ' + user.name + ' has been created ');
                 resolve(user);
             });
         });

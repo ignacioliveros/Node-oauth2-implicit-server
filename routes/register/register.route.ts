@@ -33,11 +33,11 @@ export class RegisterRoute {
                                 viewModel: req.body,
                             });
                         } else {
-                            const user: IUser = {_id: null, username: '', fullName: '', password: '' , claims: [] };
-                            user.fullName = req.body.fullname;
-                            user.username = req.body.username;
+                            const user: IUser = {_id: null, preferred_username: '', name: '', password: '' , claims: [] };
+                            user.name = req.body.fullname;
+                            user.preferred_username = req.body.username;
                             user.password = req.body.password;
-                            user.claims = [{ type: 'email', name: req.body.email }];
+                            user.claims = [{ type: 'email', value: req.body.email }, { type: 'role', value: 'user' }];
                             this.userRepo.createUser(user)
                                 .then((user) => {
                                     req.flash('success_msg', 'You are registered');

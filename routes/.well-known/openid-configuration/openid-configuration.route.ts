@@ -23,8 +23,6 @@ export class OpenIdConfigurationRoute {
                         "openid",
                         "profile",
                         "email",
-                        "api.role",
-                        "offline_access",
                     ],
                     claims_supported: [
                         "sub",
@@ -47,11 +45,7 @@ export class OpenIdConfigurationRoute {
                         "role",
                     ],
                     grant_types_supported: [
-                        "authorization_code",
-                        "client_credentials",
-                        "refresh_token",
                         "implicit",
-                        "password",
                     ],
                     response_types_supported: [
                         "id_token token",
