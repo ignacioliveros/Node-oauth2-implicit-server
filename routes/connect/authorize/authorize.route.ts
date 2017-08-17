@@ -18,7 +18,7 @@ export class AuthorizeRoute {
                         res.status(400).json({ message: 'bad request' });
                     }
                     if (req.query.client_id) {
-                        this.authProcess.createResponse(req.user._id, req.query)
+                        this.authProcess.createResponse(req.query, req.user._id)
                             .then((response) => {
                                 console.log(req.user.preferred_username + ' is loged in');
                                 res.redirect(response);
@@ -32,11 +32,14 @@ export class AuthorizeRoute {
                 }
                 if (!req.isAuthenticated()) {
                     if (req.query.client_id) {
-                        if (req.query.scope.indexOf('openid') <= -1) {
-                            res.status(400).json({ message: 'bad request' });
-                        } else {
-                            res.redirect('/login' + '?' + queryString.stringify(req.query));
-                        }
+                        console.log(req.user);
+                        this.authProcess.createResponse(req.query)
+                            .then((response) => {
+                                    res.redirect('/login' + '?' + queryString.stringify(req.query));
+
+                            }).catch((err) => {
+                                res.status(400).json(err);
+                            });
                     } else {
                         res.redirect('/login');
                     }

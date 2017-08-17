@@ -9,12 +9,15 @@ import * as  expressValidator from 'express-validator';
 import * as http from 'http';
 import * as path from 'path';
 
-import { PassportAuth} from './authentication/passport/passportAuth';
 import { MongoConnection} from './dbConnection/mongoConnection';
 import {DbSeeder } from './mongoModels/client.model'; // creates a client just for test
+import { PassportAuth} from './passport/passportAuth';
 import { Routes } from './router/router';
 
+process.env.PORT = '4000';
+
 export class Server {
+
     public app: express.Application;
     private port = process.env.PORT || 4000;
     private server: http.Server;
