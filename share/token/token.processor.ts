@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as jwt from 'jsonwebtoken';
-import { IAccessToken , IIdToken } from '../../entities/token.entity';
+import { IAccessToken, IIdToken } from '../../entities/token.entity';
 
 export class TokenProcesor {
     private puk;
@@ -21,13 +21,16 @@ export class TokenProcesor {
         });
     }
 
-    public idTokenHintDecoder(hint: string): IIdToken {
-        const idToken = hint.replace('id_token_hint: ', '');
-        const decode = jwt.verify(idToken, this.puk, { ignoreExpiration: true });
-        if (typeof decode === 'object') {
-            const tokenDeco: IIdToken = decode as IIdToken;
-            return tokenDeco;
-        }
-
+    public idTokenHintDecoder(hint: string): Promise<IIdToken> {
+        return new Promise((resolve, reject) => {
+            const idToken = hint.replace('id_token_hint: ', '');
+            jwt.verify(idToken, this.puk, { ignoreExpiration: true }, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(data as IIdToken);
+                }
+            });
+        });
     }
 }

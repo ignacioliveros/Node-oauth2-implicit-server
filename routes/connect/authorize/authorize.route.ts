@@ -1,15 +1,23 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import * as queryString from 'querystring';
 
-import { AuthReqProcessor} from '../../../authentication/auth-process/authReqProcessor';
+import { AuthReqProcessor } from '../../../authentication/auth-process/authReqProcessor';
+import { ClientRepository, IClientRepository } from '../../../repository/client.repostory';
+import { IUserRepository, UserRepository } from '../../../repository/user.repository';
 
 export class AuthorizeRoute {
 
-    private authProcess = new AuthReqProcessor();
+    private userRepository: IUserRepository;
+    private clientRepository: IClientRepository;
+    private authProcess: AuthReqProcessor;
 
     constructor(private authorizeRouter: Router) {
         this.routesSet();
+        this.userRepository = new UserRepository();
+        this.clientRepository = new ClientRepository();
+        this.authProcess = new AuthReqProcessor(this.clientRepository, this.userRepository);
     }
+
     public routesSet() {
         this.authorizeRouter.route('/')
             .get((req: Request, res: Response) => {
@@ -24,7 +32,7 @@ export class AuthorizeRoute {
                                 res.redirect(response);
                             }).catch((err) => {
                                 res.status(400).json(err);
-                        });
+                            });
 
                     } else {
                         res.status(400).json({ message: 'bad request' });
@@ -32,10 +40,9 @@ export class AuthorizeRoute {
                 }
                 if (!req.isAuthenticated()) {
                     if (req.query.client_id) {
-                        console.log(req.user);
                         this.authProcess.createResponse(req.query)
                             .then((response) => {
-                                    res.redirect('/login' + '?' + queryString.stringify(req.query));
+                                res.redirect('/login' + '?' + queryString.stringify(req.query));
 
                             }).catch((err) => {
                                 res.status(400).json(err);

@@ -8,17 +8,15 @@ import { IAuthReq } from '../../entities/auth.req.entity';
 import { IClient } from '../../entities/client.entity';
 import { IAccessToken, IIdToken } from '../../entities/token.entity';
 import { IUser } from '../../entities/user.entity';
-import { ClientRepository, IClientRepository } from '../../repository/client.repostory';
-import { IUserRepository, UserRepository } from '../../repository/user.repository';
+import { IClientRepository } from '../../repository/client.repostory';
+import { IUserRepository } from '../../repository/user.repository';
 
 export class AuthReqProcessor {
 
-    private clientRepository = new ClientRepository();
-    private userRepository = new UserRepository();
     private puk;
     private pk;
 
-    constructor() {
+    constructor(private clientRepository: IClientRepository, private userRepository: IUserRepository ) {
         this.puk = fs.readFileSync('./cert/pubkey.pem', 'ascii');
         this.pk = fs.readFileSync('./cert/key.pem');
     }
