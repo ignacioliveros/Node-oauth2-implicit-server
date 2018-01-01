@@ -25,7 +25,7 @@ export class PassportAuth {
                         return done(null, false, { message: 'Invalid password' });
                     }
                 }).catch((err) => {
-                    console.log(err);
+                    console.log(err); // check this later....
                 });
         }));
 

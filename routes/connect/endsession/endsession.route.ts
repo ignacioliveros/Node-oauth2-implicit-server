@@ -22,8 +22,8 @@ export class EndSessionRoute {
         this.endsessionRouter.route('/')
             .get((req: Request, res: Response) => {
                 if (req.isAuthenticated()) {
+                    this.redirecUri = req.query.post_logout_redirect_uri;
                     if (req.query.id_token_hint) {
-                        this.redirecUri = req.query.post_logout_redirect_uri;
                         this.endUSerProcess.checkBeforeLogout(req.query.id_token_hint, this.redirecUri)
                             .then((client) => {
                                 if (client) {

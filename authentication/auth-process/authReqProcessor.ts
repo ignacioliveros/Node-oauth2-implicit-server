@@ -35,7 +35,7 @@ export class AuthReqProcessor {
         if (userId) {
             const user = await this.userRepository.getUserById(userId);
 
-            const tokens = await this.createToke(user, client, authReq);
+            const tokens = await this.createTokens(user, client, authReq);
             const response = {
                 access_token: tokens.accessTokenEncode,
                 id_token: tokens.idTokenEncode,
@@ -70,7 +70,7 @@ export class AuthReqProcessor {
         });
     }
 
-    private createToke(user: IUser, client: IClient, authReq: IAuthReq): Promise<{ accessTokenEncode: string, idTokenEncode: string }> {
+    private createTokens(user: IUser, client: IClient, authReq: IAuthReq): Promise<{ accessTokenEncode: string, idTokenEncode: string }> {
         return new Promise((resolve, reject) => {
             const accessToken: IAccessToken = {
                 iss: "http://localhost:" + process.env.PORT,

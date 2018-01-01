@@ -1,1 +1,1 @@
-# node-oauth-implicit-server
+# Node-oauth2-implicit-server
